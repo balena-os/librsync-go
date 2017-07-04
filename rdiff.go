@@ -2,7 +2,6 @@ package rdiff
 
 import (
     "io"
-	"os"
 	"fmt"
 	"encoding/binary"
 )
