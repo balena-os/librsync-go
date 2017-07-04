@@ -45,7 +45,7 @@ func readParam(r io.Reader, size uint8) int64 {
 	return 0
 }
 
-func patch(base io.ReadSeeker, delta io.Reader, out io.Writer) error {
+func Patch(base io.ReadSeeker, delta io.Reader, out io.Writer) error {
 	var magic MagicNumber
 
 	err := binary.Read(delta, binary.BigEndian, &magic)
