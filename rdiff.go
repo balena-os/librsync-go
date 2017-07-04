@@ -78,10 +78,8 @@ func patch(base io.ReadSeeker, delta io.Reader, out io.Writer) error {
 		default:
 			return fmt.Errorf("Bogus command %x", cmd.Kind)
 		case KIND_LITERAL:
-			fmt.Fprintf(os.Stderr, "LITERAL(%v) %d %d\n", cmd.Len1 == 0, param1, param2)
 			io.CopyN(out, delta, param1)
 		case KIND_COPY:
-			fmt.Fprintf(os.Stderr, "COPY(%v) %d %d\n", cmd.Len1 == 0, param1, param2)
 			base.Seek(param1, io.SeekStart)
 			io.CopyN(out, base, param2)
 		case KIND_END:
