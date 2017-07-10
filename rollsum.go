@@ -59,3 +59,9 @@ func (r *Rollsum) Rollout(out byte) {
 func (r *Rollsum) Digest() uint32 {
 	return (uint32(r.s2) << 16) | (uint32(r.s1) & 0xffff)
 }
+
+func (r *Rollsum) Reset() {
+	r.count = 0
+	r.s1 = 0
+	r.s2 = 0
+}
