@@ -35,7 +35,7 @@ func CalcStrongSum(data []byte, sigType MagicNumber, strongLen uint32) ([]byte, 
 	return nil, fmt.Errorf("Invalid sigType %#x", sigType)
 }
 
-func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, sigType MagicNumber) error {
+func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, sigType MagicNumber) (*SignatureType, error) {
 	var maxStrongLen uint32
 
 	switch sigType {
@@ -44,45 +44,55 @@ func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, si
 	case MD4_SIG_MAGIC:
 		maxStrongLen = MD4_SUM_LENGTH
 	default:
-		return fmt.Errorf("invalid sigType %#x", sigType)
+		return nil, fmt.Errorf("invalid sigType %#x", sigType)
 	}
 
 	if strongLen > maxStrongLen {
-		return fmt.Errorf("invalid strongLen %d for sigType %#x", strongLen, sigType)
+		return nil, fmt.Errorf("invalid strongLen %d for sigType %#x", strongLen, sigType)
 	}
 
 	err := binary.Write(output, binary.BigEndian, sigType)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	err = binary.Write(output, binary.BigEndian, blockLen)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	err = binary.Write(output, binary.BigEndian, strongLen)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	block := make([]byte, blockLen)
+
+	var ret SignatureType
+	ret.weak2block = make(map[uint32]int)
+	ret.sigType = sigType
+	ret.strongLen = strongLen
+	ret.blockLen = blockLen
 
 	for {
 		n, err := io.ReadFull(input, block)
 		if err == io.ErrUnexpectedEOF || err == io.EOF {
 			break
 		} else if err != nil {
-			return err
+			return nil, err
 		}
 		data := block[:n]
 
-		err = binary.Write(output, binary.BigEndian, WeakChecksum(data))
+		weak := WeakChecksum(data)
+		err = binary.Write(output, binary.BigEndian, weak)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		strong, _ := CalcStrongSum(data, sigType, strongLen)
 		output.Write(strong)
+
+		ret.weak2block[weak] = len(ret.strongSigs)
+		ret.strongSigs = append(ret.strongSigs, strong)
 	}
 
-	return nil
+	return &ret, nil
 }
