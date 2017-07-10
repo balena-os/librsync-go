@@ -1,33 +1,33 @@
 package rdiff
 
 import (
-	"io"
-	"fmt"
 	"encoding/binary"
+	"fmt"
+	"io"
 
-	"golang.org/x/crypto/md4"
 	"golang.org/x/crypto/blake2b"
+	"golang.org/x/crypto/md4"
 )
 
 const (
 	BLAKE2_SUM_LENGTH = 32
-	MD4_SUM_LENGTH = 16
+	MD4_SUM_LENGTH    = 16
 )
 
 func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, sigType MagicNumber) error {
 	var maxStrongLen uint32
 
-    switch sigType {
-    case BLAKE2_SIG_MAGIC:
+	switch sigType {
+	case BLAKE2_SIG_MAGIC:
 		maxStrongLen = BLAKE2_SUM_LENGTH
-    case MD4_SIG_MAGIC:
+	case MD4_SIG_MAGIC:
 		maxStrongLen = MD4_SUM_LENGTH
-    default:
-        return fmt.Errorf("invalid sigType %#x", sigType);
-    }
+	default:
+		return fmt.Errorf("invalid sigType %#x", sigType)
+	}
 
 	if strongLen > maxStrongLen {
-		return fmt.Errorf("invalid strongLlen %d for sigType %#x", strongLen, sigType);
+		return fmt.Errorf("invalid strongLlen %d for sigType %#x", strongLen, sigType)
 	}
 
 	err := binary.Write(output, binary.BigEndian, sigType)

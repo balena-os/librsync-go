@@ -1,9 +1,9 @@
 package rdiff
 
 import (
-    "io"
-	"fmt"
 	"encoding/binary"
+	"fmt"
+	"io"
 )
 
 type MagicNumber uint32
@@ -53,7 +53,7 @@ func Patch(base io.ReadSeeker, delta io.Reader, out io.Writer) error {
 	}
 
 	if magic != DELTA_MAGIC {
-		return fmt.Errorf("Got magic number %x rather than expected value %x", magic, DELTA_MAGIC);
+		return fmt.Errorf("Got magic number %x rather than expected value %x", magic, DELTA_MAGIC)
 	}
 
 	for {
