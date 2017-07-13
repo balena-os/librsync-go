@@ -1,4 +1,4 @@
-package rdiff
+package librsync
 
 import (
 	"bufio"

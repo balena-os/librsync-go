@@ -1,4 +1,4 @@
-package rdiff
+package librsync
 
 type Rollsum struct {
 	count  uint64
