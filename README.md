@@ -9,7 +9,7 @@ Installing
 To install the rdiff utility:
 
 ```
-go install github.com/resin-os/librsync-go/cmd/rdiff
+go install github.com/balena-os/librsync-go/cmd/rdiff
 ```
 
-To use it as a library simply include `github.com/resin-os/librsync-go` in your import statement
+To use it as a library simply include `github.com/balena-os/librsync-go` in your import statement
