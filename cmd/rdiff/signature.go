@@ -1,17 +1,17 @@
 package main
 
 import (
-	"os"
 	_ "io/ioutil"
+	"os"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/balena-os/librsync-go"
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
-	"github.com/resin-os/librsync-go"
 )
 
 func CommandSignature(c *cli.Context) {
 	if len(c.Args()) > 2 {
-		logrus.Warnf("%d additional arguments passed are ignored", len(c.Args()) - 2)
+		logrus.Warnf("%d additional arguments passed are ignored", len(c.Args())-2)
 	}
 
 	if c.Args().Get(0) == "" {
