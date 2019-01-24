@@ -6,7 +6,7 @@ import (
 	"encoding/binary"
 	"io"
 
-	"github.com/resin-os/circbuf"
+	"github.com/balena-os/circbuf"
 )
 
 func Delta(sig *SignatureType, i io.Reader, output io.Writer) error {
