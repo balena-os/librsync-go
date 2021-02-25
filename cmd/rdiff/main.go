@@ -1,8 +1,8 @@
 package main
 
 import (
-	"os"
 	"log"
+	"os"
 
 	"github.com/urfave/cli"
 )
@@ -17,10 +17,10 @@ func main() {
 	app.Action = cli.ShowAppHelp
 	app.Commands = []cli.Command{
 		{
-			Name:    "signature",
-			Usage:   "creates a signature of the input file",
+			Name:      "signature",
+			Usage:     "creates a signature of the input file",
 			ArgsUsage: "BASIS SIGNATURE",
-			Action:  CommandSignature,
+			Action:    CommandSignature,
 			Flags: []cli.Flag{
 				cli.UintFlag{
 					Name:  "block-size, b",
@@ -40,16 +40,16 @@ func main() {
 			},
 		},
 		{
-			Name:    "delta",
-			Usage:   "calculates the binary diff between old and new files",
+			Name:      "delta",
+			Usage:     "calculates the binary diff between old and new files",
 			ArgsUsage: "SIGNATURE NEWFILE DELTA",
-			Action:  CommandDelta,
+			Action:    CommandDelta,
 		},
 		{
-			Name:    "patch",
-			Usage:   "uses the delta file and old file to produce the new file",
+			Name:      "patch",
+			Usage:     "uses the delta file and old file to produce the new file",
 			ArgsUsage: "BASIS DELTA NEWFILE",
-			Action:  CommandPatch,
+			Action:    CommandPatch,
 		},
 	}
 
