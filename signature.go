@@ -1,6 +1,7 @@
 package librsync
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -95,4 +96,68 @@ func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, si
 	}
 
 	return &ret, nil
+}
+
+func (s *SignatureType) MarshalBinary() ([]byte, error) {
+	var buf bytes.Buffer
+	err := binary.Write(&buf, binary.BigEndian, s.sigType)
+	if err != nil {
+		return nil, err
+	}
+	err = binary.Write(&buf, binary.BigEndian, s.blockLen)
+	if err != nil {
+		return nil, err
+	}
+	err = binary.Write(&buf, binary.BigEndian, s.strongLen)
+	if err != nil {
+		return nil, err
+	}
+	idx := 0
+	for weak := range s.weak2block {
+		err := binary.Write(&buf, binary.BigEndian, weak)
+		if err != nil {
+			return nil, err
+		}
+		buf.Write(s.strongSigs[idx])
+		idx++
+		if err != nil {
+			return nil, err
+		}
+	}
+	return buf.Bytes(), nil
+}
+
+func (s *SignatureType) UnmarshalBinary(data []byte) error {
+	buf := bytes.NewReader(data)
+	if err := binary.Read(buf, binary.BigEndian, &s.sigType); err != nil {
+		return err
+	}
+	if err := binary.Read(buf, binary.BigEndian, &s.blockLen); err != nil {
+		return err
+	}
+	if err := binary.Read(buf, binary.BigEndian, &s.strongLen); err != nil {
+		return err
+	}
+	idx := 0
+	s.weak2block = make(map[uint32]int)
+	for {
+		var weak uint32
+		err := binary.Read(buf, binary.BigEndian, &weak)
+		if err != nil {
+			// we're done here
+			if err == io.EOF {
+				break
+			}
+			return err
+		}
+		s.weak2block[weak] = idx
+		idx++
+
+		var strong []byte
+		if err := binary.Read(buf, binary.BigEndian, &strong); err != nil {
+			return err
+		}
+		s.strongSigs = append(s.strongSigs, strong)
+	}
+	return nil
 }
