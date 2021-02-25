@@ -4,9 +4,10 @@ import (
 	_ "io/ioutil"
 	"os"
 
-	"github.com/balena-os/librsync-go"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
+
+	"github.com/balena-os/librsync-go"
 )
 
 func CommandSignature(c *cli.Context) {
