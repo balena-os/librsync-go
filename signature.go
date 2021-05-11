@@ -75,7 +75,7 @@ func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, si
 
 	for {
 		n, err := input.Read(block)
-		if err == io.ErrUnexpectedEOF || err == io.EOF {
+		if err == io.EOF {
 			break
 		} else if err != nil {
 			return nil, err
