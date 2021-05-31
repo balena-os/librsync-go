@@ -1,9 +1,6 @@
 # librsync-go Test Data
 
-Reference files (`*.signature`, `*.delta`) were created using the original (C
-version) `rdiff`.
-
-Old and new files created as follows:
+The old and new files were created as follows:
 
 * `000.old`/`000.new`: Both files are equal.
 * `001.old`/`001.new`: The new file was created by appending some data to the
@@ -25,3 +22,22 @@ Old and new files created as follows:
 * `008.old`/`008.new`: Old file has data, new file is empty.
 * `009.old`/`009.new`: Old file is empty, new file has data.
 * `010.old`/`010.new`: Both files are empty.
+
+The "golden files" (`*.signature`, `*.delta`) were created using the original (C
+version) `rdiff`:
+
+```sh
+FILE=011
+ROLLSUM=rollsum
+HASH=md4
+BLOCKSIZE=3
+STRONGSIZE=9
+
+SIGFILE="$FILE-$HASH-$BLOCKSIZE-$STRONGSIZE.signature"
+DELTAFILE="$FILE-$HASH-$BLOCKSIZE-$STRONGSIZE.delta"
+
+rdiff --rollsum="$ROLLSUM" --hash="$HASH" --block-size="$BLOCKSIZE" \
+    --sum-size="$STRONGSIZE" signature "$FILE".old "$SIGFILE" \
+&& \
+rdiff delta "$SIGFILE" "$FILE".new "$DELTAFILE"
+```
