@@ -1,10 +1,7 @@
 package librsync
 
 import (
-	"encoding/binary"
 	"fmt"
-	"io"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -39,62 +36,4 @@ func argsFromTestName(name string) (file string, magic MagicNumber, blockLen, st
 	strongLen = uint32(strongLen64)
 
 	return
-}
-
-func readSignatureFile(path string) (*SignatureType, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-
-	var magic MagicNumber
-	err = binary.Read(f, binary.BigEndian, &magic)
-	if err != nil {
-		return nil, err
-	}
-
-	var blockLen uint32
-	err = binary.Read(f, binary.BigEndian, &blockLen)
-	if err != nil {
-		return nil, err
-	}
-
-	var strongLen uint32
-	err = binary.Read(f, binary.BigEndian, &strongLen)
-	if err != nil {
-		return nil, err
-	}
-
-	strongSigs := [][]byte{}
-	weak2block := map[uint32]int{}
-
-	for {
-		var weakSum uint32
-		err = binary.Read(f, binary.BigEndian, &weakSum)
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			return nil, err
-		}
-
-		strongSum := make([]byte, strongLen)
-		n, err := f.Read(strongSum)
-		if err != nil {
-			return nil, err
-		}
-		if n != int(strongLen) {
-			return nil, fmt.Errorf("got only %d/%d bytes of the strong hash", n, strongLen)
-		}
-
-		weak2block[weakSum] = len(strongSigs)
-		strongSigs = append(strongSigs, strongSum)
-	}
-
-	return &SignatureType{
-		sigType:    magic,
-		blockLen:   blockLen,
-		strongLen:  strongLen,
-		strongSigs: strongSigs,
-		weak2block: weak2block,
-	}, nil
 }

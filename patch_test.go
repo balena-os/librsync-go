@@ -87,7 +87,7 @@ func TestDeltaAndPatch(t *testing.T) {
 			r.NoError(err)
 
 			// Generate delta
-			sig, err := readSignatureFile("testdata/" + tt + ".signature")
+			sig, err := ReadSignatureFile("testdata/" + tt + ".signature")
 			r.NoError(err)
 
 			newFile, err := os.Open("testdata/" + file + ".new")

@@ -86,7 +86,7 @@ func TestSignature(t *testing.T) {
 			gotSig, err := Signature(input, output, blockLen, strongLen, magic)
 			r.NoError(err)
 
-			wantSig, err := readSignatureFile("testdata/" + tt + ".signature")
+			wantSig, err := ReadSignatureFile("testdata/" + tt + ".signature")
 			r.NoError(err)
 			a.Equal(wantSig.blockLen, gotSig.blockLen)
 			a.Equal(wantSig.sigType, gotSig.sigType)
