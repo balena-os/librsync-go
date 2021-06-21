@@ -44,6 +44,6 @@ func CommandDelta(c *cli.Context) {
 
 	err = librsync.Delta(signature, newfile, delta)
 	if err != nil {
-		panic(err)
+		logrus.Fatal(err)
 	}
 }
