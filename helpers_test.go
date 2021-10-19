@@ -38,6 +38,8 @@ var allTestCases = []string{
 	"010-blake2-512-32",
 	"010-blake2-7-6",
 	"010-md4-4096-8",
+	"011-blake2-3-32",
+	"011-md4-3-9",
 }
 
 func argsFromTestName(name string) (file string, magic MagicNumber, blockLen, strongLen uint32, err error) {
