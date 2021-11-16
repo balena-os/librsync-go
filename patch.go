@@ -75,12 +75,23 @@ func Patch(base io.ReadSeeker, delta io.Reader, out io.Writer) error {
 
 		switch cmd.Kind {
 		default:
-			return fmt.Errorf("Bogus command %x", cmd.Kind)
+			return fmt.Errorf("bogus command %x", cmd.Kind)
 		case KIND_LITERAL:
-			io.CopyN(out, delta, param1)
+			_, err := io.CopyN(out, delta, param1)
+			if err != nil {
+				return fmt.Errorf("copying for LITERAL(%v) command: %v", param1, err)
+			}
 		case KIND_COPY:
-			base.Seek(param1, io.SeekStart)
-			io.CopyN(out, base, param2)
+			_, err := base.Seek(param1, io.SeekStart)
+			if err != nil {
+				return fmt.Errorf("seeking for COPY(%v, %v) command: %v", param1, param2, err)
+			}
+
+			_, err = io.CopyN(out, base, param2)
+			if err != nil {
+				return fmt.Errorf("copying for COPY(%v, %v) command: %v", param1, param2, err)
+			}
+
 		case KIND_END:
 			return nil
 		}
