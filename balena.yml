@@ -1,6 +1,6 @@
 type: type-product-os-t-golang-source@1.1.0
 name: librsync-go
-version: 0.6.1
+version: 0.6.3
 data:
   platforms:
     - linux/amd64
