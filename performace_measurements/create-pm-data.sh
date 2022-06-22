@@ -29,13 +29,13 @@ function generateRandomFiles() {
     dd if=/dev/urandom of=post.tmp bs=1K count=$(($1/10))
     dd if=/dev/urandom of=alt.tmp bs=1K count=$(($1/10))
 
-    cat pre.tmp mid.tmp post.tmp > $1-abc.data
-    cat mid.tmp post.tmp > $1-bc.data
-    cat mid.tmp > $1-b.data
-    cat pre.tmp mid.tmp post.tmp alt.tmp > $1-abcx.data
-    cat pre.tmp mid.tmp alt.tmp > $1-abx.data
-    cat alt.tmp mid.tmp post.tmp > $1-xbc.data
-    cat pre.tmp alt.tmp post.tmp > $1-axc.data
+    cat pre.tmp mid.tmp post.tmp > ${1}000-abc.data
+    cat mid.tmp post.tmp > ${1}000-bc.data
+    cat mid.tmp > ${1}000-b.data
+    cat pre.tmp mid.tmp post.tmp alt.tmp > ${1}000-abcx.data
+    cat pre.tmp mid.tmp alt.tmp > ${1}000-abx.data
+    cat alt.tmp mid.tmp post.tmp > ${1}000-xbc.data
+    cat pre.tmp alt.tmp post.tmp > ${1}000-axc.data
 
     rm -f pre.tmp mid.tmp post.tmp alt.tmp
 }
