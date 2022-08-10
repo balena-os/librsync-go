@@ -17,8 +17,7 @@
 #
 # This script's output is a CSV file with the following fields:
 #
-# - FileSize: The "reference file size", in KB (like 10 for 10 KB files or
-#   10000000 for 10GB files)
+# - FileSize: The "reference file size", in bytes.
 # - BasisFile: The file name used as the basis (old) file.
 # - TargetFile: The file name used as the target (new) file.
 #
@@ -27,16 +26,12 @@
 #
 # - SigSize: The resulting signature size, in bytes
 # - SigTime: The time taken to generate the signature in seconds
-# - SigMem: The maximum amount of memory used to generate the signature, in KB
-# - DeltaSize: The resulting delta size, in byes
+# - SigMem: The maximum amount of memory used to generate the signature, in bytes
+# - DeltaSize: The resulting delta size, in bytes
 # - DeltaTime: The time taken to generate the delta in seconds
-# - DeltaMem: The maximum amount of memory used to generate the delta, in KB
+# - DeltaMem: The maximum amount of memory used to generate the delta, in bytes
 # - PatchTime: The time taken to apply the delta in seconds
-# - PatchMem: The maximum amount of memory used to apply the delta, in KB
-
-# TODO: Some of the values above are in bytes, others are in KB. It's annoying
-# to analyze data in different units. We should probably just use bytes
-# everywhere.
+# - PatchMem: The maximum amount of memory used to apply the delta, in bytes
 
 # GNU time is here.
 TIME="/usr/bin/time"
@@ -52,11 +47,11 @@ RDIFF="./rdiff"
 function checkForDependencies() {
     $RDIFF &> /dev/null
     if [ $? != 0 ]; then
-        echo "Expected to have the librsync-go rdiff binary on the current directory!"
+        echo "Expected to have the librsync-go rdiff binary at $RDIFF!"
         exit 1
     fi
 
-    $TIME &> /dev/null
+    $TIME --help &> /dev/null
     if [ $? != 0 ]; then
         echo "Expected to have the `time` binary at $TIME"
         exit 1
@@ -73,6 +68,12 @@ function toSeconds() {
     echo $((10#$mins * 60 + 10#$secs)).$subSecs
 }
 
+# Converts $1 from "kilobytes" to bytes. A "kilobyte" is interpreted as being
+# 1024 bytes (AKA kibibyte), because that's what GNU time uses (see
+# https://stackoverflow.com/questions/61392725/kilobytes-or-kibibytes-in-gnu-time)
+function kbToBytes() {
+    echo $(($1 * 1024))
+}
 
 # Measures one case, echoes the result as a line of our final CSV results
 # file.
@@ -93,16 +94,16 @@ function measurePerformanceForOneCase() {
     $TIME -f "%M\t%E" -o the-sig-data $RDIFF signature --block-size $3 --sum-size $4 "$1" the-sig
     outSigSize=$(stat -c %s the-sig)
     outSigTime=$(toSeconds $(cut -f 2 the-sig-data))
-    outSigMem=$(cut -f 1 the-sig-data)
+    outSigMem=$(kbToBytes $(cut -f 1 the-sig-data))
 
     $TIME -f "%M\t%E" -o the-delta-data $RDIFF delta the-sig "$2" the-delta
     outDeltaSize=$(stat -c %s the-delta)
     outDeltaTime=$(toSeconds $(cut -f 2 the-delta-data))
-    outDeltaMem=$(cut -f 1 the-delta-data)
+    outDeltaMem=$(kbToBytes $(cut -f 1 the-delta-data))
 
     $TIME -f "%M\t%E" -o the-patch-data $RDIFF patch "$1" the-delta the-target
     outPatchTime=$(toSeconds $(cut -f 2 the-patch-data))
-    outPatchMem=$(cut -f 1 the-patch-data)
+    outPatchMem=$(kbToBytes $(cut -f 1 the-patch-data))
 
     rm the-sig the-sig-data the-delta the-delta-data the-patch-data the-target
 
@@ -115,7 +116,7 @@ function measurePerformanceForOneCase() {
 function measurePerformanceForSize() {
     for basisFile in $1-abc.data; do
         for targetFile in $1-abcx.data $1-abx.data $1-axc.data $1-b.data $1-bc.data $1-xbc.data; do
-            for blockSize in 256 512 1024 2048 4096 8194 16384 32768 65536 257 513 1025 2049 4097 8195 16385 32769 65537; do
+            for blockSize in 256 512 1024 2048 4096 8192 16384 32768 65536 131072 257 513 1025 2049 4097 8193 16385 32769 65537 131073; do
                 for strongSumSize in 16 20 24 28 32; do
                     measurePerformanceForOneCase $basisFile $targetFile $blockSize $strongSumSize
                 done
@@ -134,20 +135,20 @@ function printHeader() {
 # Main script body
 #
 
-if [ ! checkForDependencies ]; then
+if ! checkForDependencies; then
     exit 1
 fi
 
 printHeader
 
 # Run performance tests for various input file sizes
-measurePerformanceForSize 10
-measurePerformanceForSize 100
-measurePerformanceForSize 1000
 measurePerformanceForSize 10000
 measurePerformanceForSize 100000
 measurePerformanceForSize 1000000
 measurePerformanceForSize 10000000
+measurePerformanceForSize 100000000
+measurePerformanceForSize 1000000000
+measurePerformanceForSize 10000000000
 
 # Alternatively, if you are just playing around, you can do this to measure one
 # single set of parameters:
