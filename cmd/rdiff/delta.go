@@ -40,7 +40,7 @@ func CommandDelta(c *cli.Context) {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	defer newfile.Close()
+	defer delta.Close()
 
 	err = librsync.Delta(signature, newfile, delta)
 	if err != nil {
