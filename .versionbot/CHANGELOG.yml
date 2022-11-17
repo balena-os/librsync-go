@@ -1,0 +1,404 @@
+- commits:
+    - subject: Use flowzone for versioning
+      hash: e74f9f68a4f96b4dea2945373a4e80094003c727
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 0.7.3
+  title: ""
+  date: 2022-11-17T21:06:50.665Z
+- version: 0.7.2
+  date: 2022-10-10T13:43:17Z
+  commits:
+    - hash: 66fb9821470656f2c343da1805638a1146da8cee
+      author: Leandro Motta Barros
+      footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        change-type: patch
+      subject: Close the delta file after running the delta command
+      body: |-
+        We were previously closing the new file twice by mistake, while leaving
+        the delta file unclosed.
+- version: 0.7.1
+- date: 2022-08-10T16:48:54Z
+- commits:
+    - hash: 5a55fd9e337503cd6e7a1bc13f41835d6263b47a
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - subject: Improve benchmark scripts
+- commits:
+    - body: |-
+        * Fix detection of dependencies. Previous code was broken and would not
+        alert about missing dependencies.
+        * Make all sizes in the report be in bytes. Previously, some values were
+        in kB, others in bytes, which was not great.
+        * Include 131072 in the default list of block sizes to test. This is the
+        power of two that is next to the ideal block size for 10GB files.
+- commits:
+    - hash: 87f0d1ddb4576b1d52ca31003b9ed937787db524
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - subject: Improve handling of the delta output buffer
+- commits:
+    - body: |-
+        Before this commit, the delta output buffer (for LITERAL commands) was
+        unbounded, so very long sequences on the new file without a match on the
+        old file could allocate ginormous amounts of memory.
+        This commit adds a limit to this buffer, so that we impose a limit on
+        the amount of memory we allocate at once. As a minor side effect, this
+        also limits the size of the literal sequence on a single LITERAL
+        command to the size of this output buffer.
+        In addition to limiting the buffer size, this commit also pre-allocates
+        the buffer memory. This avoids frequent memory reallocations and copies,
+        and generates less garbage to the garbage collector.
+- version: 0.7.0
+- date: 2022-06-03T22:13:26Z
+- commits:
+    - hash: ee5bf9bc5f6c30735ef1bf5f44bff35d0404dd44
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - footers:
+        change-type: minor
+- commits:
+    - subject: Update circbuf to v0.1.1
+- commits:
+    - body: |-
+        This version brings an optimized code path for sizes that are power of
+        two.
+- commits:
+    - hash: 39003db71b215af2a5809f934aac5c3b2a1518aa
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - subject: Vendor dependencies
+- commits:
+    - body: null
+- version: 0.6.2
+- date: 2021-12-17T14:07:02Z
+- commits:
+    - hash: f3d2f99c99edddc61598a20ab87f4f2993064ad7
+- commits:
+    - author: Vasily Kirichenko
+- commits:
+    - subject: "fixed: ReadSignatureFile does not close the file"
+- commits:
+    - body: null
+- commits:
+    - hash: 66377b5eac4e3fafb59929cec60e06e53a18be71
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - subject: Add contribution guidelines
+- commits:
+    - body: null
+- version: 0.6.1
+- date: 2021-10-19T19:00:01Z
+- commits:
+    - hash: ff5a0e3178a54b988389e95e2bdaed35068a6fd6
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - subject: Add scripts for measuring the performance of librsync-go
+- commits:
+    - body: |-
+        These scripts are meant to measure how much CPU and memory we use to
+        generate and apply deltas, and also the size of the resulting deltas and
+        signature files.
+        More importantly, the scripts explore the librsync-go parameter space,
+        so that we can get answers to questions like "are we allocating more and
+        more memory as the input files grow?" or "how does the delta generation
+        time change as we increase the block size?"
+- version: 0.6.0
+- date: 2021-10-19T08:33:37Z
+- commits:
+    - hash: 3168ee5a726aea02a57808139d23746183a09072
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        change-type: minor
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - subject: "Bugfix: bad delta if block is larger than new file"
+- commits:
+    - body: |-
+        If the new file is smaller than the block size, then a correct delta
+        shall consist of single instruction:
+        1. A COPY, if the new file matches the last entry on the signature (the
+        one generated from the tail of the old file, whose size is smaller
+        than the block size).
+        2. A LITERAL otherwise (that includes the whole contents of the new
+        file).
+        Previously, we were writing a bogus zero byte to our circular buffer
+        right on the beginning of the delta generation. This would break the
+        cases above:
+        1. It was preventing a proper match with the signature, thus we would
+        never generate a COPY command on this case.
+        2. Our LITERAL would include that bogus zero -- in other words, we would
+        generate a corrupted new file.
+        The main change of this commit is the removal of that bogus
+        `block.WriteByte(0)`.
+        The commit also removes the `pos` variable which was not used anywhere.
+        It also enables all test cases (since now they all pass) and includes
+        one additional test case that tests the case 1 above.
+- version: 0.5.0
+- date: 2021-07-27T14:32:34Z
+- commits:
+    - hash: 5fdb712d83f3e7cefab9c03766e8c3c04902aa07
+- commits:
+    - author: Tomas Markauskas
+- commits:
+    - subject: Don't ignore last block if it's less than blockLen
+- commits:
+    - body: null
+- commits:
+    - hash: b54c3080307be9059e0f57cf697608e463ac11b3
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        change-type: minor
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - subject: Avoid unnecessary test, enable tests cases
+- commits:
+    - body: |-
+        We no longer need to check for io.ErrUnexpectedEOF because
+        io.Reader.Read() is supposed to return only io.EOF.
+        Also, enabled all test cases that were fixed by the previous commit.
+- version: 0.4.0
+- date: 2021-06-21T20:35:04Z
+- commits:
+    - hash: aa2b8c0de8815c9b2fd90e72047f8b188b90ea28
+- commits:
+    - author: Steven Falken
+- commits:
+    - footers:
+        change-type: minor
+- commits:
+    - subject: "cmd: implement delta command"
+- commits:
+    - body: null
+- commits:
+    - hash: 6f1fc902e161a6835d8ee38df4255c752bef989d
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - subject: Use logrus to report error
+- commits:
+    - body: null
+- version: 0.3.0
+- date: 2021-06-17T12:42:19Z
+- commits:
+    - hash: 7f917290bcf4c5762f9b3d1ec47ba96177011e32
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - subject: Improve unit tests
+- commits:
+    - body: |-
+        The new tests make use of some deltas and signatures generated by the
+        rdiff from the original librsync (the one written in C). The idea of
+        these tests is to make sure we are generating results that match those
+        of the original library.
+- commits:
+    - hash: b4641eb66d68a37379b0e2f0d0849859cbfc32b9
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - subject: Describe how to generate the golden files
+- commits:
+    - body: null
+- commits:
+    - hash: 0e28e40dcf38b0f59a80858844140b8b813e20a8
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - footers:
+        change-type: minor
+- commits:
+    - subject: Export the ReadSignatureFile() function
+- commits:
+    - body: |-
+        Currently, this function is used only on a unit test and could be
+        private. But it's better to make it exported already because we'll need
+        it to properly implement the "delta" command on the `rdiff` program.
+- version: 0.2.1
+- date: 2021-06-02T13:55:31Z
+- commits:
+    - hash: ba69b9307f83baf1b087a29ea5a62f929e8634d1
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - subject: Add benchmarks
+- commits:
+    - body: null
+- version: 0.2.0
+- date: 2021-06-01T15:35:41Z
+- commits:
+    - hash: 8227d8575b446ee71f849d6f96093311cef3bc8c
+- commits:
+    - author: Leandro Motta Barros
+- commits:
+    - footers:
+        change-type: minor
+- commits:
+    - footers:
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+- commits:
+    - subject: "Bugfix: use signed arithmetic in Rollsum.Rotate()"
+- commits:
+    - body: |-
+        Rollsum.Rotate() was previously doing subtraction on values of type
+        byte, which in Go always result in a byte (and therefore unsigned)
+        value. That subtraction was supposed to be signed tough.
+        This also add unit tests to Rollsum, including a simple one that used to
+        trigger the bug described above. All "expected" values used in these
+        unit tests were generated using the original librsync.
+- version: 0.1.0
+- date: 2021-05-11T18:32:41Z
+- commits:
+    - hash: 76f9391216f3d30ee4e542f24473b49c94602ef0
+- commits:
+    - author: Robert Günzler
+- commits:
+    - footers:
+        signed-off-by: Robert Günzler <robertg@balena.io>
+- commits:
+    - subject: Format code
+- commits:
+    - body: using `gofumpt -l -s -w .`
+- commits:
+    - hash: d807e7208f4a81a20136bc9d181d6a6f5a314bd8
+- commits:
+    - author: Robert Günzler
+- commits:
+    - footers:
+        change-type: minor
+- commits:
+    - footers:
+        signed-off-by: Robert Günzler <robertg@balena.io>
+- commits:
+    - subject: Add tests for signature and delta generation
+- commits:
+    - body: null
+- commits:
+    - hash: 9d41ddf581afda5325efcf476dcf572d04225b50
+- commits:
+    - author: Robert Günzler
+- commits:
+    - footers:
+        signed-off-by: Robert Günzler <robertg@balena.io>
+- commits:
+    - subject: Hook up to CI
+- commits:
+    - body: null
+- commits:
+    - hash: 2d3009ea30c1fbcf9ccbe147f9c8ac0fb41ef658
+- commits:
+    - author: Robert Günzler
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Robert Günzler <robertg@balena.io>
+- commits:
+    - subject: "go.mod: Add module file"
+- commits:
+    - body: >-
+        Go 1.11 comes with support for modules, which makes it work outside of
+
+        GOPATH. The toolchain requires a go.mod file to derive import paths of
+
+        packages used.
+
+        The go.sum file contains checksums for all direct and indirect dependencies.
+
+        https://github.com/golang/go/wiki/Modules#faqs--gomod-and-gosum
+
+        This also updates import paths from resin-os to balena-os.
+- commits:
+    - hash: 9ecbab21b5542e3a41edf5453234d1c145956c2a
+- commits:
+    - author: Robert Günzler
+- commits:
+    - footers:
+        signed-off-by: Robert Günzler <robertg@balena.io>
+- commits:
+    - subject: Update import paths in README
+- commits:
+    - body: null
+- commits:
+    - hash: fcb9c69a0ef6509b486db2ee799b3dd9fc19561d
+- commits:
+    - author: Akis Kesoglou
+- commits:
+    - footers:
+        signed-off-by: Akis Kesoglou <akiskesoglou@gmail.com>
+- commits:
+    - subject: Use single byte read/write methods of circbuf
+- commits:
+    - body: |-
+        This improves delta generation by a factor of 4x-5x.
+        Depends on resin-os/circbuf@4877a790ad636d
