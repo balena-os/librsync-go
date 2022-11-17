@@ -39,10 +39,10 @@ func intSize(d uint64) uint8 {
 	}
 }
 
-func newMatch(output io.Writer) match {
+func newMatch(output io.Writer, buff []byte) match {
 	return match{
 		output: output,
-		lit:    make([]byte, 0, OUTPUT_BUFFER_SIZE),
+		lit:    buff,
 	}
 }
 
