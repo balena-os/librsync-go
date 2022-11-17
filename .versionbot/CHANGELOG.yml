@@ -1,4 +1,19 @@
 - commits:
+    - subject: "feat: add DeltaBuff() which accepts literal buffer"
+      hash: e1ce03c7876551dead7d981d69f43d83dca5bd16
+      body: |
+        Signed-off-by: Matej Vasek <mvasek@redhat.com>
+      footer:
+        Change-Type: minor
+        change-type: minor
+        Signed-off-by: Matej Vasek <mvasek@redhat.com>
+        signed-off-by: Matej Vasek <mvasek@redhat.com>
+      author: Matej Vasek
+      nested: []
+  version: 0.8.0
+  title: ""
+  date: 2022-11-17T21:54:41.178Z
+- commits:
     - subject: Use flowzone for versioning
       hash: e74f9f68a4f96b4dea2945373a4e80094003c727
       body: ""
