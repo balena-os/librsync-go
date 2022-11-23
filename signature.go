@@ -131,12 +131,9 @@ func ReadSignature(r io.Reader) (*SignatureType, error) {
 		}
 
 		strongSum := make([]byte, strongLen)
-		n, err := r.Read(strongSum)
+		_, err := io.ReadAtLeast(r, strongSum, int(strongLen))
 		if err != nil {
 			return nil, err
-		}
-		if n != int(strongLen) {
-			return nil, fmt.Errorf("got only %d/%d bytes of the strong hash", n, strongLen)
 		}
 
 		weak2block[weakSum] = len(strongSigs)
