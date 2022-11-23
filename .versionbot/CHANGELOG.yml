@@ -1,4 +1,16 @@
 - commits:
+    - subject: "fix: reading of strongSum in ReadSignature()"
+      hash: 7a60ae3d9b30bdec78b5699a00386f2d7b9a42e0
+      body: |
+        Signed-off-by: Matej Vasek <mvasek@redhat.com>
+      footer:
+        Change-Type: patch
+        change-type: patch
+      author: Matej Vasek
+      nested: []
+  version: 0.8.1
+  date: 2022-11-23T20:15:04.199Z
+- commits:
     - subject: "feat: add DeltaBuff() which accepts literal buffer"
       hash: e1ce03c7876551dead7d981d69f43d83dca5bd16
       body: |
@@ -113,7 +125,7 @@
 - commits:
     - subject: Vendor dependencies
 - commits:
-    - body: null
+    - ? body
 - version: 0.6.2
 - date: 2021-12-17T14:07:02Z
 - commits:
@@ -123,7 +135,7 @@
 - commits:
     - subject: "fixed: ReadSignatureFile does not close the file"
 - commits:
-    - body: null
+    - ? body
 - commits:
     - hash: 66377b5eac4e3fafb59929cec60e06e53a18be71
 - commits:
@@ -137,7 +149,7 @@
 - commits:
     - subject: Add contribution guidelines
 - commits:
-    - body: null
+    - ? body
 - version: 0.6.1
 - date: 2021-10-19T19:00:01Z
 - commits:
@@ -205,7 +217,7 @@
 - commits:
     - subject: Don't ignore last block if it's less than blockLen
 - commits:
-    - body: null
+    - ? body
 - commits:
     - hash: b54c3080307be9059e0f57cf697608e463ac11b3
 - commits:
@@ -235,7 +247,7 @@
 - commits:
     - subject: "cmd: implement delta command"
 - commits:
-    - body: null
+    - ? body
 - commits:
     - hash: 6f1fc902e161a6835d8ee38df4255c752bef989d
 - commits:
@@ -243,7 +255,7 @@
 - commits:
     - subject: Use logrus to report error
 - commits:
-    - body: null
+    - ? body
 - version: 0.3.0
 - date: 2021-06-17T12:42:19Z
 - commits:
@@ -274,7 +286,7 @@
 - commits:
     - subject: Describe how to generate the golden files
 - commits:
-    - body: null
+    - ? body
 - commits:
     - hash: 0e28e40dcf38b0f59a80858844140b8b813e20a8
 - commits:
@@ -307,7 +319,7 @@
 - commits:
     - subject: Add benchmarks
 - commits:
-    - body: null
+    - ? body
 - version: 0.2.0
 - date: 2021-06-01T15:35:41Z
 - commits:
@@ -356,7 +368,7 @@
 - commits:
     - subject: Add tests for signature and delta generation
 - commits:
-    - body: null
+    - ? body
 - commits:
     - hash: 9d41ddf581afda5325efcf476dcf572d04225b50
 - commits:
@@ -367,7 +379,7 @@
 - commits:
     - subject: Hook up to CI
 - commits:
-    - body: null
+    - ? body
 - commits:
     - hash: 2d3009ea30c1fbcf9ccbe147f9c8ac0fb41ef658
 - commits:
@@ -403,7 +415,7 @@
 - commits:
     - subject: Update import paths in README
 - commits:
-    - body: null
+    - ? body
 - commits:
     - hash: fcb9c69a0ef6509b486db2ee799b3dd9fc19561d
 - commits:
