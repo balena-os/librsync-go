@@ -1,4 +1,20 @@
 - commits:
+    - subject: Enable external contributions
+      hash: c4c595b0424bc4fa2836fb408c0c83b5b99e3bbd
+      body: |
+        See Flowzone docs:
+        https://github.com/product-os/flowzone#external-contributions
+      footer:
+        Signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        Change-type: patch
+        change-type: patch
+      author: Leandro Motta Barros
+      nested: []
+  version: 0.8.1
+  title: ""
+  date: 2023-02-07T15:00:08.525Z
+- commits:
     - subject: "feat: add DeltaBuff() which accepts literal buffer"
       hash: e1ce03c7876551dead7d981d69f43d83dca5bd16
       body: |
