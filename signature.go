@@ -131,7 +131,7 @@ func ReadSignature(r io.Reader) (*SignatureType, error) {
 		}
 
 		strongSum := make([]byte, strongLen)
-		_, err := io.ReadAtLeast(r, strongSum, int(strongLen))
+		_, err := io.ReadFull(r, strongSum)
 		if err != nil {
 			return nil, err
 		}
