@@ -1,4 +1,17 @@
 - commits:
+    - subject: "fix: reading of strongSum in ReadSignature()"
+      hash: 0029e33870fd4e89800673003a1b9a40859b6b7c
+      body: |
+        Signed-off-by: Matej Vasek <mvasek@redhat.com>
+      footer:
+        Change-Type: patch
+        change-type: patch
+      author: Matej Vasek
+      nested: []
+  version: 0.8.2
+  title: ""
+  date: 2023-02-09T18:28:59.725Z
+- commits:
     - subject: Enable external contributions
       hash: c4c595b0424bc4fa2836fb408c0c83b5b99e3bbd
       body: |
