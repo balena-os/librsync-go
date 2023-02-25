@@ -22,9 +22,10 @@ github.com/urfave/cli
 golang.org/x/crypto/blake2b
 golang.org/x/crypto/md4
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/sys v0.0.0-20190122071731-054c452bb702
+# golang.org/x/sys v0.1.0
 ## explicit
 golang.org/x/sys/cpu
+golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
