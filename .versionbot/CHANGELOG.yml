@@ -1,4 +1,19 @@
 - commits:
+    - subject: Update Flowzone settings
+      hash: fae64c04cc1178057387a4e8b78a925f45448551
+      body: |
+        Following the latest recommendations from the Flowzone docs.
+      footer:
+        Signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        Change-type: patch
+        change-type: patch
+      author: Leandro Motta Barros
+      nested: []
+  version: 0.8.3
+  title: ""
+  date: 2023-03-20T18:18:49.798Z
+- commits:
     - subject: "fix: reading of strongSum in ReadSignature()"
       hash: 0029e33870fd4e89800673003a1b9a40859b6b7c
       body: |
