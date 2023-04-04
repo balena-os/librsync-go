@@ -74,12 +74,22 @@ func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, si
 	ret.blockLen = blockLen
 
 	for {
-		n, err := input.Read(block)
+		n, err := io.ReadAtLeast(input, block, int(blockLen))
 		if err == io.EOF {
+			// We reached the end of the input, we are done with the signature
 			break
+		} else if err == nil || err == io.ErrUnexpectedEOF {
+			if n == 0 {
+				// No real error and no new data either: that also signals the
+				// end the input; we are done with the signature
+				break
+			}
+			// No real error, got data. Leave this `if` and checksum this block
 		} else if err != nil {
+			// Got a real error, report it back to the caller
 			return nil, err
 		}
+
 		data := block[:n]
 
 		weak := WeakChecksum(data)
