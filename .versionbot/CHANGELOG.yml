@@ -1,4 +1,40 @@
 - commits:
+    - subject: Update go.mod version
+      hash: 8b64f32adcf349da31e94bf698e18f9c9845c526
+      body: ""
+      footer:
+        Signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        Change-type: patch
+        change-type: patch
+      author: Leandro Motta Barros
+      nested: []
+    - subject: "Bugfix: don't compute checksums for partial blocks"
+      hash: eb8de9bf95e5e0624936a54627d7bda4f63f4097
+      body: |
+        Except in the case of the last block, which can be smaller than the full
+        block size.
+
+        We previously were using `input.Read()` to read data, but this doesn't
+        guarantee that the whole block of data will be read at once. So, with
+        certain data sources (things that are not files are usually troublesome
+        in practice) we'd end up treating a partial block as if it were a full
+        one.
+
+        This is wrong, we should instead keep reading until we get a full block
+        worth of data (or reach the end of the data stream). To achieve this, we
+        now use `io.ReadAtLeast()` to read data.
+      footer:
+        Signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        signed-off-by: Leandro Motta Barros <leandro@balena.io>
+        Change-type: patch
+        change-type: patch
+      author: Leandro Motta Barros
+      nested: []
+  version: 0.8.5
+  title: ""
+  date: 2023-04-04T20:10:26.481Z
+- commits:
     - subject: Update and vendor dependencies
       hash: fe00170244a8f5ed02b297500dfa9d23087e43b4
       body: ""
