@@ -51,6 +51,12 @@ func main() {
 			ArgsUsage: "BASIS DELTA NEWFILE",
 			Action:    CommandPatch,
 		},
+		{
+			Name:      "disassemble",
+			Usage:     "shows the operations the delta contains",
+			ArgsUsage: "DELTA",
+			Action:    CommandDisassemble,
+		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
