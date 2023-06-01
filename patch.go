@@ -62,7 +62,7 @@ func Patch(base io.ReadSeeker, delta io.Reader, out io.Writer) error {
 		if err != nil {
 			return err
 		}
-		cmd := op2cmd[op]
+		cmd := Op2cmd[op]
 
 		var param1, param2 int64
 
