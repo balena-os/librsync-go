@@ -16,7 +16,7 @@ type errorI interface {
 	Error(args ...interface{})
 }
 
-func signature(t errorI, src io.Reader) *SignatureType {
+func signature(t errorI, src io.Reader, dataSize int) *SignatureType {
 	var (
 		magic            = BLAKE2_SIG_MAGIC
 		blockLen  uint32 = 512
@@ -24,10 +24,11 @@ func signature(t errorI, src io.Reader) *SignatureType {
 		bufSize          = 65536
 	)
 
-	s, err := Signature(
+	s, err := SignatureWithBlockCount(
 		bufio.NewReaderSize(src, bufSize),
 		io.Discard,
-		blockLen, strongLen, magic)
+		blockLen, strongLen, magic,
+		dataSize/int(blockLen))
 	if err != nil {
 		t.Error(err)
 	}

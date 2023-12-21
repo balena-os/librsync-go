@@ -15,7 +15,7 @@ func benchmarkSignature(b *testing.B, totalBytes int64) {
 
 	for i := 0; i < b.N; i++ {
 		src := io.LimitReader(rand.New(rand.NewSource(time.Now().UnixNano())), totalBytes)
-		signature(b, src)
+		signature(b, src, int(totalBytes))
 	}
 }
 
@@ -33,7 +33,7 @@ func benchmarkDeltaChangeTail(b *testing.B, totalBytes int64) {
 	oldBytes := totalBytes - newBytes
 	oldSeed := time.Now().UnixNano()
 	oldData := io.LimitReader(rand.New(rand.NewSource(oldSeed)), totalBytes)
-	s := signature(b, oldData)
+	s := signature(b, oldData, int(totalBytes))
 
 	b.SetBytes(totalBytes)
 	b.ReportAllocs()
@@ -74,7 +74,7 @@ func benchmarkDeltaAppend(b *testing.B, totalBytes int64) {
 	newBytes := totalBytes / 10
 	oldSeed := time.Now().UnixNano()
 	oldData := io.LimitReader(rand.New(rand.NewSource(oldSeed)), totalBytes)
-	s := signature(b, oldData)
+	s := signature(b, oldData, int(totalBytes))
 
 	b.SetBytes(totalBytes)
 	b.ReportAllocs()
@@ -110,7 +110,7 @@ func benchmarkDeltaPrepend(b *testing.B, totalBytes int64) {
 	newBytes := totalBytes / 10
 	oldSeed := time.Now().UnixNano()
 	oldData := io.LimitReader(rand.New(rand.NewSource(oldSeed)), totalBytes)
-	s := signature(b, oldData)
+	s := signature(b, oldData, int(totalBytes))
 
 	b.SetBytes(totalBytes)
 	b.ReportAllocs()
@@ -150,7 +150,7 @@ func benchmarkDeltaInpend(b *testing.B, totalBytes int64) {
 	firstBytes := totalBytes / 3
 	lastBytes := totalBytes - firstBytes
 
-	s := signature(b, oldData)
+	s := signature(b, oldData, int(totalBytes))
 
 	b.SetBytes(totalBytes)
 	b.ReportAllocs()
@@ -193,7 +193,7 @@ func benchmarkDeltaCutTail(b *testing.B, totalBytes int64) {
 	newBytes := totalBytes - totalBytes/10
 	oldSeed := time.Now().UnixNano()
 	oldData := io.LimitReader(rand.New(rand.NewSource(oldSeed)), totalBytes)
-	s := signature(b, oldData)
+	s := signature(b, oldData, int(totalBytes))
 
 	b.SetBytes(totalBytes)
 	b.ReportAllocs()
@@ -226,7 +226,7 @@ func BenchmarkDeltaCutTail1MB(b *testing.B) {
 func benchmarkDeltaCutHead(b *testing.B, totalBytes int64) {
 	oldSeed := time.Now().UnixNano()
 	oldData := io.LimitReader(rand.New(rand.NewSource(oldSeed)), totalBytes)
-	s := signature(b, oldData)
+	s := signature(b, oldData, int(totalBytes))
 
 	b.SetBytes(totalBytes)
 	b.ReportAllocs()
