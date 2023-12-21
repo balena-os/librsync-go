@@ -21,14 +21,15 @@ func Delta(sig *SignatureType, i io.Reader, output io.Writer) error {
 // The slice shall have zero size, and capacity of OUTPUT_BUFFER_SIZE.
 //
 // Example of usage:
-//	 var files []string
-//	 var litBuff = make([]byte, 0, OUTPUT_BUFFER_SIZE)
-//	 for _, file := range files {
-//	   f, _ := os.Open(file)
-//	   sig, _ := ReadSignatureFile(file + ".sig")
-//	   delta, _ := os.OpenFile(file+".delta", os.O_CREATE|os.O_WRONLY, 0644)
-//	   _ = DeltaBuff(sig, f, delta, litBuff)
-//	 }
+//
+//	var files []string
+//	var litBuff = make([]byte, 0, OUTPUT_BUFFER_SIZE)
+//	for _, file := range files {
+//	  f, _ := os.Open(file)
+//	  sig, _ := ReadSignatureFile(file + ".sig")
+//	  delta, _ := os.OpenFile(file+".delta", os.O_CREATE|os.O_WRONLY, 0644)
+//	  _ = DeltaBuff(sig, f, delta, litBuff)
+//	}
 func DeltaBuff(sig *SignatureType, i io.Reader, output io.Writer, litBuff []byte) error {
 	if len(litBuff) != 0 || cap(litBuff) != OUTPUT_BUFFER_SIZE {
 		return fmt.Errorf("bad literal buffer")
