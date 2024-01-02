@@ -5,9 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-
-	"golang.org/x/crypto/blake2b"
-	"golang.org/x/crypto/md4"
 )
 
 const (
@@ -26,19 +23,6 @@ type SignatureType struct {
 	// during the hot loop of the signature calculation.
 	strongSigs []byte
 	weak2block map[uint32]int
-}
-
-func CalcStrongSum(data []byte, sigType MagicNumber, strongLen uint32) ([]byte, error) {
-	switch sigType {
-	case BLAKE2_SIG_MAGIC:
-		d := blake2b.Sum256(data)
-		return d[:strongLen], nil
-	case MD4_SIG_MAGIC:
-		d := md4.New()
-		d.Write(data)
-		return d.Sum(nil)[:strongLen], nil
-	}
-	return nil, fmt.Errorf("Invalid sigType %#x", sigType)
 }
 
 func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, sigType MagicNumber) (*SignatureType, error) {
@@ -86,6 +70,11 @@ func SignatureWithBlockCount(input io.Reader, output io.Writer, blockLen, strong
 	ret.strongLen = strongLen
 	ret.blockLen = blockLen
 
+	summer, err := NewSummer(sigType, strongLen)
+	if err != nil {
+		return nil, err
+	}
+
 	for {
 		n, err := io.ReadAtLeast(input, block, int(blockLen))
 		if err == io.EOF {
@@ -111,7 +100,7 @@ func SignatureWithBlockCount(input io.Reader, output io.Writer, blockLen, strong
 			return nil, err
 		}
 
-		strong, _ := CalcStrongSum(data, sigType, strongLen)
+		strong := summer.Sum(data)
 		output.Write(strong)
 
 		ret.weak2block[weak] = len(ret.strongSigs) / int(strongLen)

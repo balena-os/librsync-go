@@ -47,6 +47,10 @@ func DeltaBuff(sig *SignatureType, i io.Reader, output io.Writer, litBuff []byte
 
 	weakSum := NewRollsum()
 	block, _ := circbuf.NewBuffer(int64(sig.blockLen))
+	summer, err := NewSummer(sig.sigType, sig.strongLen)
+	if err != nil {
+		return err
+	}
 
 	for {
 		in, err := input.ReadByte()
@@ -78,7 +82,7 @@ func DeltaBuff(sig *SignatureType, i io.Reader, output io.Writer, litBuff []byte
 		}
 
 		if blockIdx, ok := sig.weak2block[weakSum.Digest()]; ok {
-			strong2, _ := CalcStrongSum(block.Bytes(), sig.sigType, sig.strongLen)
+			strong2 := summer.Sum(block.Bytes())
 			strongStart := blockIdx * int(sig.strongLen)
 			strongEnd := strongStart + int(sig.strongLen)
 			if bytes.Equal(sig.strongSigs[strongStart:strongEnd], strong2) {
