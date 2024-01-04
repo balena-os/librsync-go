@@ -11,6 +11,7 @@ import (
 // Benchmarks generating a signature for a file totalBytes long.
 func benchmarkSignature(b *testing.B, totalBytes int64) {
 	b.SetBytes(totalBytes)
+	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
 		src := io.LimitReader(rand.New(rand.NewSource(time.Now().UnixNano())), totalBytes)
@@ -35,6 +36,7 @@ func benchmarkDeltaChangeTail(b *testing.B, totalBytes int64) {
 	s := signature(b, oldData)
 
 	b.SetBytes(totalBytes)
+	b.ReportAllocs()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
@@ -75,6 +77,7 @@ func benchmarkDeltaAppend(b *testing.B, totalBytes int64) {
 	s := signature(b, oldData)
 
 	b.SetBytes(totalBytes)
+	b.ReportAllocs()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
@@ -110,6 +113,7 @@ func benchmarkDeltaPrepend(b *testing.B, totalBytes int64) {
 	s := signature(b, oldData)
 
 	b.SetBytes(totalBytes)
+	b.ReportAllocs()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
@@ -149,6 +153,7 @@ func benchmarkDeltaInpend(b *testing.B, totalBytes int64) {
 	s := signature(b, oldData)
 
 	b.SetBytes(totalBytes)
+	b.ReportAllocs()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
@@ -191,6 +196,7 @@ func benchmarkDeltaCutTail(b *testing.B, totalBytes int64) {
 	s := signature(b, oldData)
 
 	b.SetBytes(totalBytes)
+	b.ReportAllocs()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
@@ -223,6 +229,7 @@ func benchmarkDeltaCutHead(b *testing.B, totalBytes int64) {
 	s := signature(b, oldData)
 
 	b.SetBytes(totalBytes)
+	b.ReportAllocs()
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
