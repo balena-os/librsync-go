@@ -2,7 +2,7 @@ package librsync
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"os"
 	"testing"
 
@@ -30,10 +30,10 @@ func TestPatch(t *testing.T) {
 			err = Patch(baseFile, deltaFile, output)
 			r.NoError(err)
 
-			wantNewFile, err := ioutil.ReadFile("testdata/" + file + ".new")
+			wantNewFile, err := os.ReadFile("testdata/" + file + ".new")
 			r.NoError(err)
 
-			gotNewFile, err := ioutil.ReadAll(output)
+			gotNewFile, err := io.ReadAll(output)
 			r.NoError(err)
 
 			a.Equal(wantNewFile, gotNewFile)
@@ -72,10 +72,10 @@ func TestDeltaAndPatch(t *testing.T) {
 			r.NoError(err)
 
 			// Compare
-			wantNewFile, err := ioutil.ReadFile("testdata/" + file + ".new")
+			wantNewFile, err := os.ReadFile("testdata/" + file + ".new")
 			r.NoError(err)
 
-			gotNewFile, err := ioutil.ReadAll(output)
+			gotNewFile, err := io.ReadAll(output)
 			r.NoError(err)
 
 			a.Equal(wantNewFile, gotNewFile)

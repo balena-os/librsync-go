@@ -5,9 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-
-	"golang.org/x/crypto/blake2b"
-	"golang.org/x/crypto/md4"
 )
 
 const (
@@ -16,27 +13,26 @@ const (
 )
 
 type SignatureType struct {
-	sigType    MagicNumber
-	blockLen   uint32
-	strongLen  uint32
-	strongSigs [][]byte
+	sigType   MagicNumber
+	blockLen  uint32
+	strongLen uint32
+
+	// strongSigs is interpreted as a slice of strongLen-byte values. Previously
+	// it was declared as a [][]byte, which was more clear, but didn't allow us
+	// to pre-allocate the whole memory block at once and avoid allocations
+	// during the hot loop of the signature calculation.
+	strongSigs []byte
 	weak2block map[uint32]int
 }
 
-func CalcStrongSum(data []byte, sigType MagicNumber, strongLen uint32) ([]byte, error) {
-	switch sigType {
-	case BLAKE2_SIG_MAGIC:
-		d := blake2b.Sum256(data)
-		return d[:strongLen], nil
-	case MD4_SIG_MAGIC:
-		d := md4.New()
-		d.Write(data)
-		return d.Sum(nil)[:strongLen], nil
-	}
-	return nil, fmt.Errorf("Invalid sigType %#x", sigType)
+func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, sigType MagicNumber) (*SignatureType, error) {
+	return SignatureWithBlockCount(input, output, blockLen, strongLen, sigType, 0)
 }
 
-func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, sigType MagicNumber) (*SignatureType, error) {
+// SignatureWithBlockCount is a version of Signature that allows the caller to
+// pass in the expected number of blocks in the Signature. This is used to
+// pre-allocate the internal data structures.
+func SignatureWithBlockCount(input io.Reader, output io.Writer, blockLen, strongLen uint32, sigType MagicNumber, blockCount int) (*SignatureType, error) {
 	var maxStrongLen uint32
 
 	switch sigType {
@@ -68,10 +64,16 @@ func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, si
 	block := make([]byte, blockLen)
 
 	var ret SignatureType
-	ret.weak2block = make(map[uint32]int)
+	ret.weak2block = make(map[uint32]int, blockCount)
+	ret.strongSigs = make([]byte, 0, blockCount*int(strongLen))
 	ret.sigType = sigType
 	ret.strongLen = strongLen
 	ret.blockLen = blockLen
+
+	summer, err := NewSummer(sigType, strongLen)
+	if err != nil {
+		return nil, err
+	}
 
 	for {
 		n, err := io.ReadAtLeast(input, block, int(blockLen))
@@ -98,11 +100,11 @@ func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, si
 			return nil, err
 		}
 
-		strong, _ := CalcStrongSum(data, sigType, strongLen)
+		strong := summer.Sum(data)
 		output.Write(strong)
 
-		ret.weak2block[weak] = len(ret.strongSigs)
-		ret.strongSigs = append(ret.strongSigs, strong)
+		ret.weak2block[weak] = len(ret.strongSigs) / int(strongLen)
+		ret.strongSigs = append(ret.strongSigs, strong...)
 	}
 
 	return &ret, nil
@@ -128,7 +130,7 @@ func ReadSignature(r io.Reader) (*SignatureType, error) {
 		return nil, err
 	}
 
-	strongSigs := [][]byte{}
+	strongSigs := []byte{}
 	weak2block := map[uint32]int{}
 
 	for {
@@ -146,8 +148,8 @@ func ReadSignature(r io.Reader) (*SignatureType, error) {
 			return nil, err
 		}
 
-		weak2block[weakSum] = len(strongSigs)
-		strongSigs = append(strongSigs, strongSum)
+		weak2block[weakSum] = len(strongSigs) / int(strongLen)
+		strongSigs = append(strongSigs, strongSum...)
 	}
 
 	return &SignatureType{

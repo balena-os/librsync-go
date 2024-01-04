@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"io"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,7 +16,7 @@ type errorI interface {
 	Error(args ...interface{})
 }
 
-func signature(t errorI, src io.Reader) *SignatureType {
+func signature(t errorI, src io.Reader, dataSize int) *SignatureType {
 	var (
 		magic            = BLAKE2_SIG_MAGIC
 		blockLen  uint32 = 512
@@ -24,10 +24,11 @@ func signature(t errorI, src io.Reader) *SignatureType {
 		bufSize          = 65536
 	)
 
-	s, err := Signature(
+	s, err := SignatureWithBlockCount(
 		bufio.NewReaderSize(src, bufSize),
-		ioutil.Discard,
-		blockLen, strongLen, magic)
+		io.Discard,
+		blockLen, strongLen, magic,
+		dataSize/int(blockLen))
 	if err != nil {
 		t.Error(err)
 	}
@@ -44,7 +45,7 @@ func TestSignature(t *testing.T) {
 			file, magic, blockLen, strongLen, err := argsFromTestName(tt)
 			r.NoError(err)
 
-			inputData, err := ioutil.ReadFile("testdata/" + file + ".old")
+			inputData, err := os.ReadFile("testdata/" + file + ".old")
 			r.NoError(err)
 			input := bytes.NewReader(inputData)
 
@@ -58,9 +59,9 @@ func TestSignature(t *testing.T) {
 			a.Equal(wantSig.sigType, gotSig.sigType)
 			a.Equal(wantSig.strongLen, gotSig.strongLen)
 
-			outputData, err := ioutil.ReadAll(output)
+			outputData, err := io.ReadAll(output)
 			r.NoError(err)
-			expectedData, err := ioutil.ReadFile("testdata/" + tt + ".signature")
+			expectedData, err := os.ReadFile("testdata/" + tt + ".signature")
 			r.NoError(err)
 			a.Equal(expectedData, outputData)
 		})
