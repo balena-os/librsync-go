@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "io/ioutil"
 	"os"
 
 	"github.com/sirupsen/logrus"

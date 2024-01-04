@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"io"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -26,7 +26,7 @@ func signature(t errorI, src io.Reader) *SignatureType {
 
 	s, err := Signature(
 		bufio.NewReaderSize(src, bufSize),
-		ioutil.Discard,
+		io.Discard,
 		blockLen, strongLen, magic)
 	if err != nil {
 		t.Error(err)
@@ -44,7 +44,7 @@ func TestSignature(t *testing.T) {
 			file, magic, blockLen, strongLen, err := argsFromTestName(tt)
 			r.NoError(err)
 
-			inputData, err := ioutil.ReadFile("testdata/" + file + ".old")
+			inputData, err := os.ReadFile("testdata/" + file + ".old")
 			r.NoError(err)
 			input := bytes.NewReader(inputData)
 
@@ -58,9 +58,9 @@ func TestSignature(t *testing.T) {
 			a.Equal(wantSig.sigType, gotSig.sigType)
 			a.Equal(wantSig.strongLen, gotSig.strongLen)
 
-			outputData, err := ioutil.ReadAll(output)
+			outputData, err := io.ReadAll(output)
 			r.NoError(err)
-			expectedData, err := ioutil.ReadFile("testdata/" + tt + ".signature")
+			expectedData, err := os.ReadFile("testdata/" + tt + ".signature")
 			r.NoError(err)
 			a.Equal(expectedData, outputData)
 		})

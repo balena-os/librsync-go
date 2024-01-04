@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Benchmarks generting a signature for a file totalBytes long.
+// Benchmarks generating a signature for a file totalBytes long.
 func benchmarkSignature(b *testing.B, totalBytes int64) {
 	b.SetBytes(totalBytes)
 
