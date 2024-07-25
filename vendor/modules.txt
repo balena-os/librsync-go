@@ -23,14 +23,13 @@ github.com/stretchr/testify/require
 # github.com/urfave/cli v1.22.12
 ## explicit; go 1.11
 github.com/urfave/cli
-# golang.org/x/crypto v0.7.0
-## explicit; go 1.17
+# golang.org/x/crypto v0.17.0
+## explicit; go 1.18
 golang.org/x/crypto/blake2b
 golang.org/x/crypto/md4
-# golang.org/x/sys v0.6.0
-## explicit; go 1.17
+# golang.org/x/sys v0.15.0
+## explicit; go 1.18
 golang.org/x/sys/cpu
-golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # gopkg.in/yaml.v3 v3.0.1
