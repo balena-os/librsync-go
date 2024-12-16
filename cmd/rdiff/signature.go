@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	_ "io/ioutil"
 	"os"
 
@@ -45,8 +46,14 @@ func CommandSignature(c *cli.Context) {
 		logrus.Fatal(err)
 	}
 	defer signature.Close()
+	output := bufio.NewWriter(signature)
 
-	_, err = librsync.Signature(basis, signature, uint32(c.Uint("block-size")), uint32(c.Uint("sum-size")), sigType)
+	_, err = librsync.Signature(basis, output, uint32(c.Uint("block-size")), uint32(c.Uint("sum-size")), sigType)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	err = output.Flush()
 	if err != nil {
 		logrus.Fatal(err)
 	}
