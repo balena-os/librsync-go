@@ -50,18 +50,19 @@ func DeltaBuff(sig *SignatureType, i io.Reader, output io.Writer, litBuff []byte
 	buf := make([]byte, sig.blockLen)
 
 	for {
-		var read_count uint64
+		var readCount uint64
 		if weakSum.count < uint64(sig.blockLen) {
-			read_count = uint64(sig.blockLen) - weakSum.count
+			readCount = uint64(sig.blockLen) - weakSum.count
 		} else {
-			read_count = 1
+			readCount = 1
 		}
 
-		n, err := input.Read(buf[:read_count])
-		if n == 0 || err == io.EOF {
-			break
-		} else if err != nil {
+		n, err := input.Read(buf[:readCount])
+		if err != nil && err != io.EOF {
 			return err
+		}
+		if n == 0 {
+			break
 		}
 		data := buf[:n]
 
