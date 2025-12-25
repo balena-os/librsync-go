@@ -279,7 +279,7 @@ const (
 	OP_RESERVED_255
 )
 
-var op2cmd = []Command{
+var Op2cmd = []Command{
 	{KIND_END, 0, 0, 0},        /*            OP_END =    0 */
 	{KIND_LITERAL, 1, 0, 0},    /*      OP_LITERAL_1 =  0x1 */
 	{KIND_LITERAL, 2, 0, 0},    /*      OP_LITERAL_2 =  0x2 */
