@@ -1,4 +1,44 @@
 - commits:
+    - subject: rename readCount and fix buffer reading
+      hash: 0e250cb46d1f48146e0a721790d75d64d33063f5
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Yann CARDAILLAC <yann.cardaillac@balena.io>
+        signed-off-by: Yann CARDAILLAC <yann.cardaillac@balena.io>
+      author: Yann CARDAILLAC
+      nested: []
+    - subject: bufferize signature output
+      hash: 7bff7d7de648a9e496443065a21a77fd11a78f2e
+      body: |
+        Signature writes to the ouput in very small quantities, by buffering we
+        can make signature generation much faster (up to 30%).
+      footer:
+        Signed-off-by: Alexis Auriac <alexis.auriac@epitech.eu>
+        signed-off-by: Alexis Auriac <alexis.auriac@epitech.eu>
+        Change-Type: minor
+        change-type: minor
+      author: Alexis Auriac
+      nested: []
+    - subject: "delta: read more than 1 byte when possible"
+      hash: f7193a71ad33e8fb1d8c8281ac1c3331ad0fd904
+      body: |
+        After reading 1 byte we add it to the weaksum and to the circ buffer, we
+        then check if weaksum is big enough to generate a digest, if not, back
+        to reading. A more efficient way is to always read enough for the
+        weaksum to be usable. This can speed up delta generation by around 20%.
+      footer:
+        Signed-off-by: Alexis Auriac <alexis.auriac@epitech.eu>
+        signed-off-by: Alexis Auriac <alexis.auriac@epitech.eu>
+        Change-Type: minor
+        change-type: minor
+      author: Alexis Auriac
+      nested: []
+  version: 0.9.0
+  title: ""
+  date: 2025-12-25T16:43:51.359Z
+- commits:
     - subject: Update go.mod version
       hash: 8b64f32adcf349da31e94bf698e18f9c9845c526
       body: ""
@@ -482,7 +522,8 @@
 
         packages used.
 
-        The go.sum file contains checksums for all direct and indirect dependencies.
+        The go.sum file contains checksums for all direct and indirect
+        dependencies.
 
         https://github.com/golang/go/wiki/Modules#faqs--gomod-and-gosum
 
