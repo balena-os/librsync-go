@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Measures CPU time, memory usage and resulting file sizes for the various
 # operations supported by librsync-go (signature, delta, patch) when invoked
