@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # Generates files to use as input for `run-pm.sh`.
