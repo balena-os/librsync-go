@@ -24,8 +24,8 @@ func main() {
 			Flags: []cli.Flag{
 				cli.UintFlag{
 					Name:  "block-size, b",
-					Value: 2048,
-					Usage: "Signature block size",
+					Value: 0,
+					Usage: "Signature block size (0 for auto)",
 				},
 				cli.UintFlag{
 					Name:  "sum-size, S",

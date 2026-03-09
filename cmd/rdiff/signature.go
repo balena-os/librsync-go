@@ -35,6 +35,12 @@ func CommandSignature(c *cli.Context) {
 		logrus.Fatalf("Invalid hash type: %v", c.String("hash"))
 	}
 
+	stats, err := os.Stat(c.Args().Get(0))
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	inputSize := stats.Size()
+
 	basis, err := os.Open(c.Args().Get(0))
 	if err != nil {
 		logrus.Fatal(err)
@@ -48,7 +54,7 @@ func CommandSignature(c *cli.Context) {
 	defer signature.Close()
 	output := bufio.NewWriter(signature)
 
-	_, err = librsync.Signature(basis, output, uint32(c.Uint("block-size")), uint32(c.Uint("sum-size")), sigType)
+	_, err = librsync.Signature(basis, output, uint32(c.Uint("block-size")), uint32(c.Uint("sum-size")), sigType, inputSize)
 	if err != nil {
 		logrus.Fatal(err)
 	}
