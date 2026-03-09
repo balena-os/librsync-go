@@ -109,7 +109,7 @@ func Signature(input io.Reader, output io.Writer, blockLen, strongLen uint32, si
 }
 
 // ReadSignature reads a signature from an io.Reader.
-func ReadSignature(r io.Reader) (*SignatureType, error) {
+func ReadSignature(r io.Reader, inputSize int64) (*SignatureType, error) {
 	var magic MagicNumber
 	err := binary.Read(r, binary.BigEndian, &magic)
 	if err != nil {
@@ -128,8 +128,12 @@ func ReadSignature(r io.Reader) (*SignatureType, error) {
 		return nil, err
 	}
 
-	strongSigs := [][]byte{}
-	weak2block := map[uint32]int{}
+	nbBlocks := int64(0)
+	if inputSize > 0 {
+		nbBlocks = (inputSize - 12) / (int64(strongLen) + 4)
+	}
+	strongSigs := make([][]byte, 0, nbBlocks)
+	weak2block := make(map[uint32]int, nbBlocks)
 
 	for {
 		var weakSum uint32
@@ -161,10 +165,16 @@ func ReadSignature(r io.Reader) (*SignatureType, error) {
 
 // ReadSignatureFile reads a signature from the file at path.
 func ReadSignatureFile(path string) (*SignatureType, error) {
+	stats, err := os.Stat(path)
+	if err != nil {
+		return nil, err
+	}
+	size := stats.Size()
+
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
-	return ReadSignature(f)
+	return ReadSignature(f, size)
 }
