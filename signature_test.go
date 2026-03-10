@@ -16,7 +16,7 @@ type errorI interface {
 	Error(args ...interface{})
 }
 
-func signature(t errorI, src io.Reader) *SignatureType {
+func signature(t errorI, src io.Reader, inputSize int64) *SignatureType {
 	var (
 		magic            = BLAKE2_SIG_MAGIC
 		blockLen  uint32 = 512
@@ -27,7 +27,7 @@ func signature(t errorI, src io.Reader) *SignatureType {
 	s, err := Signature(
 		bufio.NewReaderSize(src, bufSize),
 		ioutil.Discard,
-		blockLen, strongLen, magic)
+		blockLen, strongLen, magic, inputSize)
 	if err != nil {
 		t.Error(err)
 	}
@@ -49,7 +49,7 @@ func TestSignature(t *testing.T) {
 			input := bytes.NewReader(inputData)
 
 			output := &bytes.Buffer{}
-			gotSig, err := Signature(input, output, blockLen, strongLen, magic)
+			gotSig, err := Signature(input, output, blockLen, strongLen, magic, int64(len(inputData)))
 			r.NoError(err)
 
 			wantSig, err := ReadSignatureFile("testdata/" + tt + ".signature")
@@ -64,5 +64,24 @@ func TestSignature(t *testing.T) {
 			r.NoError(err)
 			a.Equal(expectedData, outputData)
 		})
+	}
+}
+
+func TestRecommendBlockLen(t *testing.T) {
+	a := assert.New(t)
+
+	tt := []struct {
+		InputSize int64
+		BlockLen  uint32
+	}{
+		{0, DEFAULT_BLOCK_LEN},
+		{1, MIN_BLOCK_LEN},
+		{1000000, 896},
+	}
+
+	for _, test := range tt {
+		blockLen := recommendBlockLen(test.InputSize)
+
+		a.Equal(test.BlockLen, blockLen)
 	}
 }
